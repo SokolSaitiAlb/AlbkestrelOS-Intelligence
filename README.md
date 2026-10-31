@@ -50,10 +50,9 @@ The model runs outside `system_server`. Android framework integration is a later
 │   ├── assistant/
 │   └── intelligence-settings/
 ├── core/
-│   ├── inference-api/ (initial Kotlin contracts + tests)
+│   ├── inference-api/ (Kotlin contracts + validation tests)
 │   ├── ai-runtime/
 │   ├── context-engine/
-│   ├── inference-api/
 │   └── model-manager/
 ├── docs/
 │   ├── architecture/
@@ -135,7 +134,7 @@ See [SECURITY_MODEL.md](docs/security/SECURITY_MODEL.md) and [THREAT_MODEL.md](d
 
 ## Development status
 
-The repository contains a pure-Kotlin inference API contract, bounded request/model validation, a streaming SHA-256 and file-size verifier, unit tests, and a CI workflow. It does not yet contain a production inference backend, Android runtime service, privileged framework integration, or ROM integration. The Phase 0 design package is ready for maintainer review; see [PHASE_0_EXIT_CHECKLIST.md](docs/development/PHASE_0_EXIT_CHECKLIST.md). Every implementation PR must include tests, threat-model impact, permission impact, and offline behavior notes.
+The repository contains an initial pure-Kotlin inference API contract, bounded request/model validation, a streaming SHA-256 and file-size verifier, 12 unit test cases, and a GitHub Actions CI workflow. The tests are committed but have not yet been confirmed as passing. It does not yet contain a production inference backend, Android runtime service, privileged framework integration, or ROM integration. The Phase 0 design package is ready for maintainer review; see [PHASE_0_EXIT_CHECKLIST.md](docs/development/PHASE_0_EXIT_CHECKLIST.md). Every implementation PR must include tests, threat-model impact, permission impact, and offline behavior notes.
 
 ## Contributing
 
