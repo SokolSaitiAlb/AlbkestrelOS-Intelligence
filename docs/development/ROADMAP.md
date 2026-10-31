@@ -26,12 +26,15 @@ Exit criteria:
 
 ## Phase 1 — Local AI Runtime
 
-**Status:** Backend-neutral API contract and validation tests started; Android service and model backend are not implemented.
+**Status:** Backend-neutral API contract, streaming file integrity verifier, validation tests, and CI workflow are committed. No test pass is claimed yet; Android service and model backend are not implemented.
 
 Deliverables:
 - [x] Initial Kotlin inference API interface and request/model validation
-- [ ] Runtime interface and backend adapter
-- Model metadata and integrity verification
+- [x] Backend-neutral Kotlin engine interface
+- [ ] Concrete backend adapter
+- [x] Streaming SHA-256 and declared-size verification utility
+- [ ] Trusted signature/provenance verification
+- [ ] Model staging, activation, unload, and rollback
 - Local model loading and unload
 - Token/time/memory budgets
 - Offline inference test
