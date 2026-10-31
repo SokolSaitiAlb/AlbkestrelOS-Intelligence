@@ -50,6 +50,7 @@ The model runs outside `system_server`. Android framework integration is a later
 │   ├── assistant/
 │   └── intelligence-settings/
 ├── core/
+│   ├── inference-api/ (initial Kotlin contracts + tests)
 │   ├── ai-runtime/
 │   ├── context-engine/
 │   ├── inference-api/
@@ -82,7 +83,7 @@ The model runs outside `system_server`. Android framework integration is a later
     └── unit/
 ```
 
-Directories are placeholders until their implementation phase begins.
+Most runtime and integration directories remain placeholders. The first executable Kotlin module is `core/inference-api`, with request/model validation and unit tests. See [BUILDING.md](docs/development/BUILDING.md) for local verification.
 
 ## Initial technology direction
 
@@ -134,7 +135,7 @@ See [SECURITY_MODEL.md](docs/security/SECURITY_MODEL.md) and [THREAT_MODEL.md](d
 
 ## Development status
 
-No production code is claimed by this scaffold. Every implementation PR must include tests, threat-model impact, permission impact, and offline behavior notes.
+The repository contains the initial pure-Kotlin inference API contract, request/model validation, unit tests, and CI workflow. It does not yet contain a production inference backend, Android runtime service, privileged framework integration, or ROM integration. The Phase 0 design package is ready for maintainer review; see [PHASE_0_EXIT_CHECKLIST.md](docs/development/PHASE_0_EXIT_CHECKLIST.md). Every implementation PR must include tests, threat-model impact, permission impact, and offline behavior notes.
 
 ## Contributing
 
