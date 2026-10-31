@@ -119,3 +119,34 @@ Verified observations:
 ## 8. Updated decision
 
 Issue #2 remains **open / partially audited**. The akita-to-zuma inheritance path and important package-specific default-grant/association configuration are now documented. Framework permission definitions, app-op behavior, provider enforcement, full manifest/vendor inputs, Health Connect runtime availability, effective SELinux compilation, and physical-device multi-user/revocation tests remain blockers.
+
+
+## 9. Framework and provider source cross-check
+
+The public LineageOS `lineage-24.0` framework/provider repositories were also inspected:
+
+- `android_frameworks_base/core/res/AndroidManifest.xml`
+- `android_frameworks_base/core/java/android/app/AppOpsManager.java`
+- `android_packages_providers_ContactsProvider/AndroidManifest.xml`
+- `android_packages_providers_CalendarProvider/AndroidManifest.xml`
+
+### Permission declarations observed
+
+- `READ_CONTACTS`, `WRITE_CONTACTS`, `READ_CALENDAR`, and `WRITE_CALENDAR` are declared with `dangerous` protection level in the reviewed framework manifest.
+- `READ_SMS` and `READ_CALL_LOG` are declared as `dangerous` and `hardRestricted`. The framework comments explicitly describe installer allowlisting requirements for restricted permissions. A normal runtime prompt alone must not be assumed to make these available.
+- `ACCESS_FINE_LOCATION` and `ACCESS_COARSE_LOCATION` are dangerous permissions associated with `ACCESS_BACKGROUND_LOCATION`; the framework declaration states that background permission alone does not grant location and that foreground location is also required.
+- `POST_NOTIFICATIONS` is declared dangerous in the reviewed framework manifest. It authorizes posting notifications, not reading notification content.
+
+### AppOps observations
+
+The reviewed `AppOpsManager.java` defines operation entries for contacts read/write, calendar read/write, call-log read/write, SMS read/receive, call placement, and notification posting. Several operation entries specify `MODE_ALLOWED` as their default mode. This is **not** an authorization bypass: the associated permission, provider enforcement, user restrictions, role/restriction policy, and AIC grant remain independent gates. AIC must not treat an AppOp default mode as proof that a caller has permission.
+
+### Provider manifest observations
+
+- Contacts Provider declares permissions including `READ_CONTACTS`, `WRITE_CONTACTS`, `READ_CALL_LOG`, and `WRITE_CALL_LOG`, plus additional platform/system permissions. Its provider-side permissions and caller checks remain authoritative; AIC must not copy the provider's own privileged permission set.
+- Calendar Provider declares `READ_CALENDAR` and `WRITE_CALENDAR`, along with account/sync-related permissions. This does not grant those permissions to an AIC caller.
+- Provider manifests show what the provider itself requires/uses; they do not alone prove every provider URI's effective read/write policy, cross-user behavior, or app-op enforcement path.
+
+### Revised status
+
+The source-level permission declaration and AppOps mapping are now partially verified against the matching LineageOS branch. Remaining work is to trace provider query enforcement (including caller UID, user/profile and app-op checks), inspect the complete runtime permission grant flow and restricted-permission installer allowlisting, and verify behavior on the actual built Pixel 8a image. Issue #2 remains open.
