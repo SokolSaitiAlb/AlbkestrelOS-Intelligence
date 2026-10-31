@@ -87,3 +87,35 @@ This matrix records Android API-level mechanisms to validate in the full target 
 ## 6. Decision
 
 **Issue #2 remains open.** This pass verifies the public device-tree entry points and records the correct permission surfaces, but it does not yet prove the complete platform policy or runtime behavior. Do not implement privileged access, AIC SELinux policy, or provider access from the isolated inference process based on this partial review.
+
+
+## 7. Inherited zuma configuration — additional review
+
+The akita product inherits `device/google/zuma` configuration. The public `LineageOS/android_device_google_zuma` `lineage-24.0` branch was therefore inspected for:
+
+- `common.mk`
+- `BoardConfig-common.mk`
+- `aosp_common.mk`
+- `default-permissions.xml`
+- `allowlist_com.google.android.as.xml`
+- `sepolicy/vendor/`, `sepolicy/product/`, and `sepolicy/system_ext/` directory structure
+
+Verified observations:
+
+1. `common.mk` declares `PRODUCT_SHIPPING_API_LEVEL := 34`. This is the device shipping API level, **not** the current platform API level or AIC target SDK. Do not use it to infer the runtime API level of the current Android 17 build.
+2. `common.mk` copies `default-permissions.xml` into the product image. That file contains package-specific default permission exceptions for named Google/system packages. It includes a fixed `READ_CALENDAR` grant for `com.google.android.settings.intelligence`, and non-fixed location grants for that package. It does **not** contain an AIC package entry. These exceptions are not a general grant to other packages and do not replace runtime/provider checks.
+3. The same file has package-specific exceptions for Google Camera, Setup Wizard, Restore, carrier services, and other named packages. Their grants must not be copied or generalized for AIC.
+4. `allowlist_com.google.android.as.xml` is a package-association allowlist for Google AI Services. It explicitly lists providers such as Contacts and Telephony for `com.google.android.as`. This is not an Android runtime permission grant, not an AIC authorization, and not a reusable permission for AlbkestrelOS. AIC must not impersonate or inherit this package's associations.
+5. `aosp_common.mk` inherits handheld and telephony system_ext/vendor product configuration. The exact final permission/app-op/provider state therefore depends on broader platform and product inputs, not only the akita device repository.
+6. `BoardConfig-common.mk` merges vendor, product, and system_ext SELinux policy directories from zuma plus shared Pixel policy. Source directories alone do not reveal the final compiled policy or establish that an isolated AIC service is denied network/provider access.
+
+### Additional security conclusions
+
+- No AIC-specific default permission exception is present in the inspected zuma default-permissions file.
+- Do not add AIC to the Google AI Services association allowlist and do not reuse Google package grants.
+- Any future AIC system-signed integration must define its own narrowly scoped package identity, permission rationale, provider adapter, SELinux domain, and tests. System signing alone must not imply unrestricted data access.
+- The final merged permissions, app-op defaults, role holders, and SELinux policy remain unverified until the full source tree is built and inspected on-device.
+
+## 8. Updated decision
+
+Issue #2 remains **open / partially audited**. The akita-to-zuma inheritance path and important package-specific default-grant/association configuration are now documented. Framework permission definitions, app-op behavior, provider enforcement, full manifest/vendor inputs, Health Connect runtime availability, effective SELinux compilation, and physical-device multi-user/revocation tests remain blockers.
