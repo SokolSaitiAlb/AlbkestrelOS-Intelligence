@@ -150,3 +150,16 @@ The reviewed `AppOpsManager.java` defines operation entries for contacts read/wr
 ### Revised status
 
 The source-level permission declaration and AppOps mapping are now partially verified against the matching LineageOS branch. Remaining work is to trace provider query enforcement (including caller UID, user/profile and app-op checks), inspect the complete runtime permission grant flow and restricted-permission installer allowlisting, and verify behavior on the actual built Pixel 8a image. Issue #2 remains open.
+
+
+## 10. Provider-level manifest and profile enforcement
+
+Additional source review of the provider manifests and implementation found:
+
+- Contacts Provider's exported `ContactsProvider2` explicitly declares `READ_CONTACTS` as its read permission and `WRITE_CONTACTS` as its write permission. It also has narrower `path-permission` exceptions for selected search/photo paths. Do not assume every contacts authority/path has identical access semantics.
+- The Contacts Provider implementation contains explicit caller-permission checks for sensitive provider methods and checks caller UID/user context for profile-related behavior. It also blocks contact writes in clone-profile scenarios where parent-contact sharing is enabled. Cross-profile access is therefore not equivalent to having `READ_CONTACTS` in the current profile.
+- Calendar Provider's exported `CalendarProvider2` declares `READ_CALENDAR` and `WRITE_CALENDAR` as provider read/write permissions.
+- Calendar Provider contains an explicit work-profile calendar path. Its own comments describe conditions including an existing enabled work profile, profile-owner approval for the calling package, and the cross-profile calendar setting. A normal calendar permission must not be treated as cross-profile authorization.
+- Both provider manifests set `android:allowBackup="false"` for the provider application. This describes the provider app's backup setting; it does not automatically define AIC's own backup policy or data-retention behavior.
+
+These observations strengthen the design requirement that AIC must bind every request to the originating Android user/profile and must never query a parent/work profile by switching user or using a broad cross-user permission. Provider access must occur through the currently authorized user context. Cross-profile access, if ever required, must be a separate reviewed capability with platform/profile-owner authorization and a dedicated confirmation flow.
