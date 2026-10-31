@@ -109,7 +109,7 @@ Do not treat this table as a final dependency lock. Select the inference backend
 6. **Phase 5 — AOSP Integration:** isolated runtime service, Binder/AIDL, framework integration, Settings UI.
 7. **Phase 6 — Validation & Release:** offline, security, privacy, thermal, battery, and performance validation.
 
-See [ROADMAP.md](docs/development/ROADMAP.md).
+See [ROADMAP.md](docs/development/ROADMAP.md) and the [GitHub Issue Index](docs/development/ISSUE_INDEX.md).
 
 ## Target device
 
