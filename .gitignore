@@ -1,0 +1,42 @@
+# Gradle / Android
+.gradle/
+**/build/
+local.properties
+*.iml
+.idea/
+.cxx/
+.externalNativeBuild/
+captures/
+
+# Native build outputs
+cmake-build-*/
+out/
+*.o
+*.a
+*.so
+
+# Local models and datasets (never commit user data or large model files)
+models/
+*.gguf
+*.onnx
+*.tflite
+*.safetensors
+*.pt
+*.pth
+*.bin
+
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+*.jks
+*.keystore
+secrets/
+*.pem
+*.key
+
+# OS/editor
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
