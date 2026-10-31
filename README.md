@@ -135,7 +135,7 @@ See [SECURITY_MODEL.md](docs/security/SECURITY_MODEL.md) and [THREAT_MODEL.md](d
 
 ## Development status
 
-The repository contains the initial pure-Kotlin inference API contract, request/model validation, unit tests, and CI workflow. It does not yet contain a production inference backend, Android runtime service, privileged framework integration, or ROM integration. The Phase 0 design package is ready for maintainer review; see [PHASE_0_EXIT_CHECKLIST.md](docs/development/PHASE_0_EXIT_CHECKLIST.md). Every implementation PR must include tests, threat-model impact, permission impact, and offline behavior notes.
+The repository contains a pure-Kotlin inference API contract, bounded request/model validation, a streaming SHA-256 and file-size verifier, unit tests, and a CI workflow. It does not yet contain a production inference backend, Android runtime service, privileged framework integration, or ROM integration. The Phase 0 design package is ready for maintainer review; see [PHASE_0_EXIT_CHECKLIST.md](docs/development/PHASE_0_EXIT_CHECKLIST.md). Every implementation PR must include tests, threat-model impact, permission impact, and offline behavior notes.
 
 ## Contributing
 
