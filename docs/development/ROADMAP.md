@@ -11,11 +11,12 @@ Deliverables:
 - [x] Initial threat model
 - [x] Privacy requirements
 - [x] Draft API contracts
-- [ ] ADR: runtime process and backend selection
-- [ ] Data classification schema
-- [ ] Permission and purpose model
-- [ ] Threat-model review
-- [ ] Phase 0 review checklist
+- [x] ADR: runtime isolation decision; backend evaluation criteria documented
+- [x] Data classification schema
+- [x] Permission and purpose model
+- [x] Pixel 8a runtime design baseline
+- [x] Phase 0 exit checklist
+- [ ] Maintainer threat-model review and formal Phase 0 sign-off
 
 Exit criteria:
 - Every trust boundary is documented.
@@ -25,8 +26,11 @@ Exit criteria:
 
 ## Phase 1 — Local AI Runtime
 
+**Status:** Backend-neutral API contract and validation tests started; Android service and model backend are not implemented.
+
 Deliverables:
-- Runtime interface and backend adapter
+- [x] Initial Kotlin inference API interface and request/model validation
+- [ ] Runtime interface and backend adapter
 - Model metadata and integrity verification
 - Local model loading and unload
 - Token/time/memory budgets
