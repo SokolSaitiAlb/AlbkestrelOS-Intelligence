@@ -19,7 +19,7 @@ Build an on-device inference runtime that can be initialized, queried, cancelled
 ### P1.2 — Model Manager
 
 - [ ] Strict model manifest schema
-- [ ] SHA-256 digest verification
+- [x] SHA-256 digest verification utility
 - [ ] Signature/provenance verification strategy
 - [ ] Model staging, activation, rollback, and deletion
 - [ ] File descriptor handoff to isolated service
